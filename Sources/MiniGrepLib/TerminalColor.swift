@@ -15,8 +15,8 @@ public struct TerminalColor {
         return "\u{001B}[\(code)m"
     }
 
-    /// Wraps given text with a command to start the custom color at the begining and ends
-    // the string with a no-color command.
+    /// Wraps given text with a command to start the custom color at the beginning and ends
+    /// the string with a no-color command.
     public func wrap(_ content: String) -> String { "\(self)\(content)\(Self.noColor)" }
 
     // Preset colors ---------------------------------------- /
