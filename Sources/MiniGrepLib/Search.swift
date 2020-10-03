@@ -79,14 +79,13 @@ public struct Search: SearchProtocol {
 
     /// Highlights the given query for the given content.
     private func highlight(_ content: String) -> String {
-        guard let selects = getRanges(for: content) else { return content }
-        let rest = selects.getInverseRanges(in: content)
-        let selectedSubs: [(String, String.Index)] = selects.map {
+        let selects: [(String, String.Index)]? = mapRanges(for: content) {
             (addHighlight(to: String(content[$0])), $0.lowerBound)
         }
-        let unselectedSubs: [(String, String.Index)] = rest.map {
+        guard let selectedSubs = selects else { return content }
+        let unselectedSubs: [(String, String.Index)] = mapRanges(for: content, inverted: true) {
             (String(content[$0]), $0.lowerBound)
-        }
+        } ?? []
         let merged: [String] = (selectedSubs + unselectedSubs).sorted { $0.1 < $1.1 }.map { $0.0 }
         return merged.joined()
     }
@@ -113,10 +112,17 @@ public struct Search: SearchProtocol {
     }
 
     /// Gets ranges of given query within given content.
-    private func getRanges(for content: String) -> [Range<String.Index>]? {
+    private func getRanges(for content: String, inverted: Bool = false) -> [Range<String.Index>]? {
         let searchQuery = getSearchContent(for: query)
         let searchContent = getSearchContent(for: content)
-        return searchContent.getRanges(of: searchQuery)
+        return searchContent.getRanges(of: searchQuery, inverted: inverted)
+    }
+    
+    /// Maps ranges of given query within given content.
+    private func mapRanges<R>(for content: String, inverted: Bool = false, _ transform: (Range<String.Index>) -> R) -> [R]? {
+        let searchQuery = getSearchContent(for: query)
+        let searchContent = getSearchContent(for: content)
+        return searchContent.mapRanges(of: searchQuery, inverted: inverted, transform)
     }
 
     /// Gets search content (depends on if case-sensitive or not).

@@ -15,6 +15,17 @@ final class MiniGrepTests: XCTestCase {
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+    
+    func testRangeIterator() {
+        let query = "foo"
+        let content = "foobarfoobazbarfoobaz"
+//        var selects = QueryRangeIterator(query, in: content)
+//        var nonSelects = QueryRangeIterator(query, in: content, inverted: true)
+//        selects.collect().forEach { print($0.getIndexRange(in: content)) }
+//        nonSelects.collect().forEach { print($0.getIndexRange(in: content)) }
+        content.getRanges(of: query)?.forEach { print($0.getIndexRange(in: content)) }
+        content.getRanges(of: query, inverted: true)?.forEach { print($0.getIndexRange(in: content)) }
+    }
 
     func testReadingFile() {
         let file = readFile(at: filename)
