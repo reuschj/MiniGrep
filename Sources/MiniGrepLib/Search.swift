@@ -80,7 +80,7 @@ public struct Search: SearchProtocol {
     /// Highlights the given query for the given content.
     private func highlight(_ content: String) -> String {
         guard let selects = getRanges(for: content) else { return content }
-        let rest = selects.getInverseRanges(in: content)
+        let rest = getRanges(for: content, inverted: true) ?? []
         let selectedSubs: [(String, String.Index)] = selects.map {
             (addHighlight(to: String(content[$0])), $0.lowerBound)
         }
@@ -113,10 +113,10 @@ public struct Search: SearchProtocol {
     }
 
     /// Gets ranges of given query within given content.
-    private func getRanges(for content: String) -> [Range<String.Index>]? {
+    private func getRanges(for content: String, inverted: Bool = false) -> [Range<String.Index>]? {
         let searchQuery = getSearchContent(for: query)
         let searchContent = getSearchContent(for: content)
-        return searchContent.getRanges(of: searchQuery)
+        return searchContent.getRanges(of: searchQuery, inverted: inverted)
     }
 
     /// Gets search content (depends on if case-sensitive or not).
