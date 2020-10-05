@@ -1,3 +1,6 @@
+import QueryRangeIterator
+import TerminalColor
+
 extension String {
 
     /// Wraps the string with escapes to produce the given terminal color

@@ -1,3 +1,5 @@
+import TerminalColor
+
 public protocol SearchProtocol {
     var query: String { get set }
     var filename: String { get set }

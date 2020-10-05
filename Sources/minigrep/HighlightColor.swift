@@ -1,4 +1,5 @@
 import ArgumentParser
+import TerminalColor
 
 /// Enum of highlight options for found query
 public enum HighlightColor: ExpressibleByArgument {
@@ -11,6 +12,18 @@ public enum HighlightColor: ExpressibleByArgument {
         case "blue", "b" : self = .blue
         case "green", "g": self = .green
         case "white", "w": self = .white
+        default: return nil
+        }
+    }
+    
+    /// Converts to corresponding terminal color
+    public var terminalColor: TerminalColor? {
+        switch self {
+        case .yellow: return .yellow
+        case .red: return .lightRed
+        case .blue: return .lightBlue
+        case .green: return .green
+        case .white: return .white
         default: return nil
         }
     }

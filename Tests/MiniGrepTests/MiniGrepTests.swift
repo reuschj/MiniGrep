@@ -1,5 +1,6 @@
 import XCTest
 import class Foundation.Bundle
+import QueryRangeIterator
 
 @testable import MiniGrepLib
 
@@ -18,13 +19,20 @@ final class MiniGrepTests: XCTestCase {
     
     func testRangeIterator() {
         let query = "foo"
-        let content = "foobarfoobazbarfoobaz"
-//        var selects = QueryRangeIterator(query, in: content)
-//        var nonSelects = QueryRangeIterator(query, in: content, inverted: true)
+        let content = "foobarfoobazbarfoobazboofoob"
+        var selects = QueryRangeIterator(query, in: content)
+        var nonSelects = QueryRangeIterator(query, in: content, inverted: true)
+        print(selects.collectStrings())
+        print(nonSelects.collectStrings())
 //        selects.collect().forEach { print($0.getIndexRange(in: content)) }
 //        nonSelects.collect().forEach { print($0.getIndexRange(in: content)) }
-        content.getRanges(of: query)?.forEach { print($0.getIndexRange(in: content)) }
-        content.getRanges(of: query, inverted: true)?.forEach { print($0.getIndexRange(in: content)) }
+//        content.getRanges(of: query)?.forEach { print($0.getIndexRange(in: content)) }
+//        content.getRanges(of: query, inverted: true)?.forEach { print($0.getIndexRange(in: content)) }
+        var foo: String = ""
+        measure {
+            foo = QueryRangeIterator.transform(query, in: content) { $0.uppercased() }
+        }
+        print(foo)
     }
 
     func testReadingFile() {
