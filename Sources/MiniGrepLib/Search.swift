@@ -1,3 +1,6 @@
+import QueryRangeIterator
+import TerminalColor
+
 /// Error type for `Search`.
 public enum SearchError: Error, CustomStringConvertible {
     case fileNotFound(filename: String)
@@ -6,9 +9,9 @@ public enum SearchError: Error, CustomStringConvertible {
     public var description: String {
         switch self {
         case .fileNotFound(let filename):
-            return "The file \"\(filename)\" was not found."
+            return "\(highlight("The file \"\(filename)\" was not found.", with: .lightRed))"
         case .queryNotFound(let query, let filename):
-            return "The query \"\(query)\" was not found in \(filename)."
+            return "\(highlight("The query \"\(query)\" was not found in \(filename).", with: .lightRed))"
         }
     }
 }
@@ -78,21 +81,16 @@ public struct Search: SearchProtocol {
     }
 
     /// Highlights the given query for the given content.
-    private func highlight(_ content: String) -> String {
-        let selects: [(String, String.Index)]? = mapRanges(for: content) {
-            (addHighlight(to: String(content[$0])), $0.lowerBound)
+    private func highlightFoundQuery(_ content: String, with ranges: [Range<String.Index>]) -> String {
+        guard let highlightColor = highlightColor else { return content }
+        let selectedSubs: [(String, String.Index)] = ranges.map {
+            (highlight(content[$0], with: highlightColor).output, $0.lowerBound)
         }
-        guard let selectedSubs = selects else { return content }
         let unselectedSubs: [(String, String.Index)] = mapRanges(for: content, inverted: true) {
             (String(content[$0]), $0.lowerBound)
         } ?? []
         let merged: [String] = (selectedSubs + unselectedSubs).sorted { $0.1 < $1.1 }.map { $0.0 }
         return merged.joined()
-    }
-
-    private func addHighlight(to text: String) -> String {
-        guard let highlightColor = highlightColor else { return text }
-        return text.terminalColor(highlightColor)
     }
 
     /// Builds a `Line` structure. Returns no `Line` if line content has no query
@@ -101,13 +99,12 @@ public struct Search: SearchProtocol {
         let ranges = getRanges(for: content)
         guard allLines || ranges != nil else { return nil }
         let foundQuery = ranges?.map { String(content[$0]) }
-        let lineText = getLineText(for: content)
+        let lineText = getLineText(for: content, with: ranges)
         return Line(
             lineText,
             at: index,
             found: foundQuery,
-            locations: ranges,
-            highlightColor: highlightColor
+            locations: ranges
         )
     }
 
@@ -132,9 +129,9 @@ public struct Search: SearchProtocol {
     }
 
     /// Gets line text (depends on if highlighted or not).
-    private func getLineText(for content: String) -> String {
-        guard highlightColor != nil else { return content }
-        return highlight(content)
+    private func getLineText(for content: String, with ranges: [Range<String.Index>]? = nil) -> String {
+        guard highlightColor != nil, let ranges = ranges else { return content }
+        return highlightFoundQuery(content, with: ranges)
     }
 
     /// Prints the given string with (optional)

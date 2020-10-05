@@ -1,6 +1,7 @@
 import Foundation
 import ArgumentParser
 import MiniGrepLib
+import TerminalColor
 
 /// A command line tool to search text in a file.
 struct Minigrep: ParsableCommand {
@@ -39,7 +40,7 @@ struct Minigrep: ParsableCommand {
     var color: HighlightColor = .yellow
 
     /// Generates the search string text.
-    private var searchString: String { "Searching for \"\(query)\" in \(filename)..." }
+    private var searchString: String { "Searching for \"\(highlight(query, with: .green))\" in \(highlight(filename, with: .green))..." }
 
     /// Prints the given string with (optional)
     /// new line before (off by default) and
@@ -49,24 +50,13 @@ struct Minigrep: ParsableCommand {
         Swift.print("\(before ? "\n" : "")\(content)\(after ? "\n" : "")")
     }
 
-    private var queryHighlightColor: TerminalColor? {
-        switch color {
-        case .yellow: return .yellow
-        case .red: return .lightRed
-        case .blue: return .lightBlue
-        case .green: return .green
-        case .white: return .white
-        default: return nil
-        }
-    }
-
     /// Runs the command
     func run() {
-        Swift.print()
+        print(self.searchString, before: true, after: true)
         let search = Search(
             for: query,
             in: filename,
-            highlightColor: queryHighlightColor,
+            highlightColor: color.terminalColor,
             caseInsensitive: insensitive,
             showAllLines: all,
             tagLines: tagged

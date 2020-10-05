@@ -2,12 +2,30 @@
   "object": {
     "pins": [
       {
+        "package": "QueryRangeIterator",
+        "repositoryURL": "https://github.com/reuschj/QueryRangeIterator",
+        "state": {
+          "branch": null,
+          "revision": "63c845709992d172b6ea39a71226d1a8fd885f23",
+          "version": "0.1.0"
+        }
+      },
+      {
         "package": "swift-argument-parser",
         "repositoryURL": "https://github.com/apple/swift-argument-parser",
         "state": {
           "branch": null,
           "revision": "92646c0cdbaca076c8d3d0207891785b3379cbff",
           "version": "0.3.1"
+        }
+      },
+      {
+        "package": "TerminalColor",
+        "repositoryURL": "https://github.com/reuschj/TerminalColor",
+        "state": {
+          "branch": null,
+          "revision": "a297bc600210cfa46982aa50073e5811ee8615ef",
+          "version": "1.0.0"
         }
       }
     ]
