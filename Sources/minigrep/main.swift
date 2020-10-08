@@ -1,7 +1,7 @@
 import Foundation
 import ArgumentParser
 import MiniGrepLib
-import TerminalColor
+import TerminalTextStyler
 
 /// A command line tool to search text in a file.
 struct Minigrep: ParsableCommand {
@@ -56,7 +56,7 @@ struct Minigrep: ParsableCommand {
         let search = Search(
             for: query,
             in: filename,
-            highlightColor: color.terminalColor,
+            highlightColor: color.terminalStyle,
             caseInsensitive: insensitive,
             showAllLines: all,
             tagLines: tagged
