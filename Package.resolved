@@ -20,11 +20,11 @@
         }
       },
       {
-        "package": "TerminalColor",
-        "repositoryURL": "https://github.com/reuschj/TerminalColor",
+        "package": "TerminalTextStyler",
+        "repositoryURL": "https://github.com/reuschj/TerminalTextStyler",
         "state": {
           "branch": null,
-          "revision": "a297bc600210cfa46982aa50073e5811ee8615ef",
+          "revision": "45a6ca50f710e84cbf6c1d84937bef0a084048b8",
           "version": "1.0.0"
         }
       }

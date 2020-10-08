@@ -1,5 +1,5 @@
 import QueryRangeIterator
-import TerminalColor
+import TerminalTextStyler
 
 /// Error type for `Search`.
 public enum SearchError: Error, CustomStringConvertible {
@@ -9,9 +9,9 @@ public enum SearchError: Error, CustomStringConvertible {
     public var description: String {
         switch self {
         case .fileNotFound(let filename):
-            return "\(highlight("The file \"\(filename)\" was not found.", with: .lightRed))"
+            return "\(highlight("The file \"\(filename)\" was not found.", with: .brightRed))"
         case .queryNotFound(let query, let filename):
-            return "\(highlight("The query \"\(query)\" was not found in \(filename).", with: .lightRed))"
+            return "\(highlight("The query \"\(query)\" was not found in \(filename).", with: .brightRed))"
         }
     }
 }
@@ -27,7 +27,7 @@ public struct Search: SearchProtocol {
     // Options ---------------------------------- /
 
     /// Highlights the found query in this color. Pass `nil` to disable highlighting.
-    public var highlightColor: TerminalColor?
+    public var highlightColor: TerminalStyle?
     /// If enabled, search results will ignore case. Case-sensitivity is default.
     public var caseInsensitive: Bool
     /// If enabled, all lines will print. By default, only lines with found query will print.
@@ -37,7 +37,7 @@ public struct Search: SearchProtocol {
     public init(
         for query: String,
         in filename: String,
-        highlightColor: TerminalColor? = .yellow,
+        highlightColor: TerminalStyle? = .brightYellow,
         caseInsensitive: Bool = false,
         showAllLines: Bool = false,
         tagLines: Bool = false

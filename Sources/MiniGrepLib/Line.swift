@@ -1,4 +1,4 @@
-import TerminalColor
+import TerminalTextStyler
 
 /// Holds information about a line of text with
 public struct Line {
@@ -31,11 +31,11 @@ public struct Line {
             let length = end - start
             return length > 1 ? "\(start)-\(end)" : "\(start)"
         }
-        return "\(highlight("[\(rangeStrings.joined(separator: ", "))]:", with: .brownOrange)) \(text)"
+        return "\(highlight("[\(rangeStrings.joined(separator: ", "))]:", with: .yellow)) \(text)"
     }
 
     /// Gets the the final string output.
     public func getOutput(tagged: Bool = true) -> String {
-        "\(highlight("\(originalIndex):", with: .brownOrange)) \(tagged ? taggedText : text)"
+        "\(highlight("\(originalIndex):", with: .yellow)) \(tagged ? taggedText : text)"
     }
 }
